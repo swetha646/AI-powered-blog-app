@@ -1,0 +1,205 @@
+{% load static %}
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Plans - Smart Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+         nav {
+      background: linear-gradient(135deg, #1e1b4b, #312e81) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+   .logo-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: transparent;
+  box-shadow: none;
+  animation: none;
+  transition: transform 0.2s ease;
+}
+
+    </style>
+</head>
+
+<body class="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 text-gray-900 font-sans">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl shadow-lg"> 
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"> 
+      <div class="flex items-center space-x-4"> 
+        <img src="{% static 'images/logo.jpeg' %}" alt="Awaaz Logo" class="logo-img" /> 
+        <span class="text-3xl font-bold gradient-text">Awaaz</span> </div>
+
+      <div class="flex items-center space-x-8">
+        <a href="/userhome" class="text-lg font-medium text-[#667eea]">Home</a>
+        <a href="/my-blogs" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">My Blogs</a>
+        <a href="/support" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">Support</a>
+        <a href="/addblog"
+          class="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-medium hover:opacity-90 transition-all">
+          Write New
+        </a>
+        <div class="relative group inline-block">
+  <!-- Small profile -->
+  <div class="flex items-center space-x-3 cursor-pointer">
+    {% if c.profile %}
+      <img src="{{ c.profile.url }}" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% else %}
+      <img src="https://via.placeholder.com/40" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% endif %}
+    <span class="font-medium">{{ c.Name }}</span>
+  </div>
+
+  <!-- Hover card -->
+  <div
+       class="absolute left-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg
+              opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50">
+
+        <div class="p-4 flex flex-col items-center space-y-3">
+          {% if c.profile %}
+            <img src="{{ c.profile.url }}" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% else %}
+            <img src="https://via.placeholder.com/96" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% endif %}
+
+          <h3 class="text-lg font-semibold">{{ c.Name }}</h3>
+          {% if c.email %}<p class="text-sm text-gray-500">{{ c.email }}</p>{% endif %}
+          {% if c.Phone %}<p class="text-sm text-gray-500">{{ c.Phone }}</p>{% endif %}
+          {% if c.Address %}<p class="text-sm text-gray-500 text-center">{{ c.Address }}</p>{% endif %}
+
+          <a href="/edit-profile/"
+            class="mt-2 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700">
+            Edit Profile
+          </a>
+        </div>
+      </div>
+    </div>
+
+        <button onclick="return confirm('Are you confirm to Logout')"><a href="/logout"
+          class="px-5 py-2 border-2 border-red-500 text-red-500 rounded-xl font-medium hover:bg-red-50 transition-all">
+          Logout
+        </a></button>
+      </div>
+    </div>
+  </nav>
+
+    <main class="pt-32 px-6 pb-20">
+        <div class="max-w-7xl mx-auto text-center fade-in">
+            <h1 class="text-5xl font-bold mb-6 gradient-text">Upgrade to Premium</h1>
+            <p class="text-xl text-gray-600 mb-16 max-w-2xl mx-auto">Unlock full access to all blog posts and exclusive
+                content. Choose the plan that fits you best.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+                <!-- 3 Months Plan -->
+                <div
+                    class="bg-white rounded-3xl shadow-xl p-10 hover:shadow-2xl transition-all border border-gray-100 transform hover:-translate-y-2">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Quarterly</h3>
+                    <div class="text-5xl font-bold gradient-text mb-2">₹499</div>
+                    <p class="text-gray-500 mb-8">3 Months Access</p>
+                    <ul class="text-left space-y-4 mb-10 text-gray-600">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Unlimited Blog Reading
+                        </li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Ad-free Experience</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 24/7 Support</li>
+                    </ul>
+                    <form action="/payment-gateway/" method="GET">
+                        <input type="hidden" name="plan" value="quarterly">
+                        <input type="hidden" name="amount" value="499">
+                        <input type="hidden" name="days" value="90">
+                        <button type="submit"
+                            class="w-full py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-bold text-lg hover:opacity-90 shadow-lg transition-all">
+                            Choose Plan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 6 Months Plan -->
+                <div
+                    class="relative bg-white rounded-3xl shadow-2xl p-10 transform scale-105 border-2 border-[#667eea] z-10">
+                    <div
+                        class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#667eea] text-white px-6 py-2 rounded-full font-bold text-sm uppercase tracking-wide">
+                        Most Popular
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Half-Yearly</h3>
+                    <div class="text-5xl font-bold gradient-text mb-2">₹899</div>
+                    <p class="text-gray-500 mb-8">6 Months Access</p>
+                    <ul class="text-left space-y-4 mb-10 text-gray-600">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> All Quarterly Features
+                        </li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Priority Support</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Save 10%</li>
+                    </ul>
+                    <form action="/payment-gateway/" method="GET">
+                        <input type="hidden" name="plan" value="half-yearly">
+                        <input type="hidden" name="amount" value="899">
+                        <input type="hidden" name="days" value="180">
+                        <button type="submit"
+                            class="w-full py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-bold text-lg hover:opacity-90 shadow-lg transition-all">
+                            Choose Plan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 1 Year Plan -->
+                <div
+                    class="bg-white rounded-3xl shadow-xl p-10 hover:shadow-2xl transition-all border border-gray-100 transform hover:-translate-y-2">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Annual</h3>
+                    <div class="text-5xl font-bold gradient-text mb-2">₹1499</div>
+                    <p class="text-gray-500 mb-8">1 Year Access</p>
+                    <ul class="text-left space-y-4 mb-10 text-gray-600">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> All Features Included
+                        </li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Exclusive Content</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Best Value</li>
+                    </ul>
+                    <form action="/payment-gateway/" method="GET">
+                        <input type="hidden" name="plan" value="annual">
+                        <input type="hidden" name="amount" value="1499">
+                        <input type="hidden" name="days" value="365">
+                        <button type="submit"
+                            class="w-full py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-bold text-lg hover:opacity-90 shadow-lg transition-all">
+                            Choose Plan
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,432 @@
+{% load static %}
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Smart Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(191,219,254,0.6), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(224,242,254,0.7), transparent 55%),
+        #f4f6fb;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+
+    /* Index-style Navbar */
+   
+    nav {
+  background: linear-gradient(135deg, #1e1b4b, #312e81) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.4) !important;
+  border-bottom: none !important;
+}
+
+    /* ==================================================
+   LOGO – MATCH LOGIN / INDEX EXACTLY
+   ================================================== */
+.logo-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: transparent;
+  box-shadow: none;
+  animation: none;
+  transition: transform 0.2s ease;
+}
+
+/* Navbar logo (Home page) */
+nav .logo-img {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+/* Hero / top section logo (if present) */
+section:first-of-type .logo-img {
+  width: 120px !important;
+  height: 120px !important;
+}
+
+/* Subtle professional hover */
+nav .logo-img:hover {
+  transform: scale(1.03);
+}
+
+    /* Typography */
+    h1.gradient-text {
+      background: none !important;
+      color: #1e1b4b !important;
+      -webkit-text-fill-color: unset !important;
+    }
+
+    p { color: #475569; }
+
+    /* Blog Cards */
+    .bg-white\/90 {
+      background-color: #ffffff !important;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 25px 50px rgba(30,27,75,0.12);
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(30,27,75,0.18);
+    }
+  </style>
+</head>
+
+<body class="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 text-gray-900 select-none">
+
+  <!-- Navbar --> 
+   <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl shadow-lg"> 
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"> 
+      <div class="flex items-center space-x-4"> 
+        <img src="{% static 'images/logo.jpeg' %}" alt="Awaaz Logo" class="logo-img" /> 
+        <span class="text-3xl font-bold gradient-text">Awaaz</span> </div>
+
+      <div class="flex items-center space-x-8">
+        <a href="/userhome" class="text-lg font-medium text-[#667eea]">Home</a>
+        <a href="/my-blogs" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">My Blogs</a>
+        <a href="/support" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">Support</a>
+        <a href="/addblog"
+          class="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-medium hover:opacity-90 transition-all">
+          Write New
+        </a>
+        <div class="relative group inline-block">
+  <!-- Small profile -->
+  <div class="flex items-center space-x-3 cursor-pointer">
+    {% if c.profile %}
+      <img src="{{ c.profile.url }}" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% else %}
+      <img src="https://via.placeholder.com/40" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% endif %}
+    <span class="font-medium">{{ c.Name }}</span>
+  </div>
+
+  <!-- Hover card -->
+  <div
+       class="absolute left-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg
+              opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50">
+
+        <div class="p-4 flex flex-col items-center space-y-3">
+          {% if c.profile %}
+            <img src="{{ c.profile.url }}" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% else %}
+            <img src="https://via.placeholder.com/96" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% endif %}
+
+          <h3 class="text-lg font-semibold">{{ c.Name }}</h3>
+          {% if c.email %}<p class="text-sm text-gray-500">{{ c.email }}</p>{% endif %}
+          {% if c.Phone %}<p class="text-sm text-gray-500">{{ c.Phone }}</p>{% endif %}
+          {% if c.Address %}<p class="text-sm text-gray-500 text-center">{{ c.Address }}</p>{% endif %}
+
+          <a href="/edit-profile/"
+            class="mt-2 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700">
+            Edit Profile
+          </a>
+        </div>
+      </div>
+    </div>
+
+        <a href="/logout" onclick="return confirm('Are you sure you want to logout?');"
+          class="px-5 py-2 border-2 border-red-500 text-red-500 rounded-xl font-medium hover:bg-red-50 transition-all">
+          Logout
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="pt-24 px-6 pb-12">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Welcome Header -->
+      <header class="text-center mb-16 fade-in">
+        <h1 class="text-6xl font-bold gradient-text mb-6">Discover Amazing Stories</h1>
+
+        <!-- Category Filter -->
+<div class="mb-8 flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-6">
+
+  <!-- Category Filter -->
+  <form method="GET" action="/userhome" id="categoryForm">
+    <select name="category" onchange="document.getElementById('categoryForm').submit()"
+      class="h-12 appearance-none bg-white border border-gray-200 text-gray-700 py-3 px-8 pr-12 rounded-full
+             focus:outline-none focus:border-[#667eea] focus:ring-2 focus:ring-[#667eea] shadow-sm hover:shadow-md transition-shadow font-medium cursor-pointer">
+      <option value="All" {% if request.GET.category == 'All' or not request.GET.category %}selected{% endif %}>
+        All Categories
+      </option>
+      <option value="Technology" {% if request.GET.category == 'Technology' %}selected{% endif %}>Technology</option>
+      <option value="Travel" {% if request.GET.category == 'Travel' %}selected{% endif %}>Travel</option>
+      <option value="Food" {% if request.GET.category == 'Food' %}selected{% endif %}>Food</option>
+      <option value="Lifestyle" {% if request.GET.category == 'Lifestyle' %}selected{% endif %}>Lifestyle</option>
+      <option value="Health" {% if request.GET.category == 'Health' %}selected{% endif %}>Health</option>
+      <option value="Education" {% if request.GET.category == 'Education' %}selected{% endif %}>Education</option>
+      <option value="Personal" {% if request.GET.category == 'Personal' %}selected{% endif %}>Personal</option>
+      <option value="Other" {% if request.GET.category == 'Other' %}selected{% endif %}>Other</option>
+    </select>
+  </form>
+
+  <!-- Language Filter -->
+  <form method="GET" action="/userhome" id="languageForm">
+    <input type="hidden" name="category" value="{{ request.GET.category|default:'All' }}">
+    <select name="language" onchange="document.getElementById('languageForm').submit()"
+      class="h-12 appearance-none bg-white border border-gray-200 text-gray-700 py-3 px-8 pr-12 rounded-full
+             focus:outline-none focus:border-[#667eea] focus:ring-2 focus:ring-[#667eea] shadow-sm hover:shadow-md transition-shadow font-medium cursor-pointer">
+      <option value="All" {% if language == 'All' %}selected{% endif %}>All Languages</option>
+      <option value="en" {% if language == 'en' %}selected{% endif %}>English</option>
+      <option value="ml" {% if language == 'ml' %}selected{% endif %}>Malayalam</option>
+      <option value="hi" {% if language == 'hi' %}selected{% endif %}>Hindi</option>
+      <option value="ta" {% if language == 'ta' %}selected{% endif %}>Tamil</option>
+    </select>
+  </form>
+
+</div>
+
+
+
+        {% if has_plan %}
+        <div
+          class="inline-block bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-2 rounded-full font-bold shadow-lg mb-6 transform hover:scale-105 transition-transform">
+          ✨ Premium Active: {{ remaining_days }} Days Left
+        </div>
+        {% else %}
+        <div class="inline-block bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-medium mb-6">
+          Free Account
+        </div>
+        {% endif %}
+
+        <div
+          class="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-2 rounded-full font-bold shadow-lg mb-6 transform hover:scale-105 transition-transform ml-4" onclick="window.location='/redeem-points/'">
+          🏆 Reward Points: {{ reward_points }}
+        </div>
+
+        <p class="text-2xl text-gray-600 max-w-3xl mx-auto">
+          Explore inspiring blogs from our creative community
+        </p>
+      </header>
+
+      <!-- Blogs Grid -->
+      <div id="blog-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {% include 'user/blog_card_partial.html' %}
+      </div>
+
+      <!-- Load More -->
+      <div class="text-center mt-16">
+        <div class="text-center mt-16">
+          <button id="loadMoreBtn"
+            class="px-10 py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl text-lg font-medium hover:opacity-90 transition-all shadow-lg">
+            Load More Blogs
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+ <div class="fixed top-4 right-4 z-50">
+    <a href="{% url 'notifications' %}" class="relative inline-block">
+        <!-- Bell Icon -->
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+             <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V9a6 6 0 10-12 0v5c0 .538-.214 1.055-.595 1.445L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+        </svg>
+
+        <!-- Badge -->
+        <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-red-600 bg-white border border-gray-400 rounded-full">
+    {{ unread_count }}
+</span>
+    </a>
+</div>
+
+
+
+  <script>
+    let currentOffset = 5;
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const blogGrid = document.getElementById('blog-grid');
+
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => {
+        const originalText = loadMoreBtn.innerText;
+        loadMoreBtn.innerText = 'Loading...';
+        loadMoreBtn.disabled = true;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category') || 'All';
+
+        fetch(`/api/load-more-blogs/?offset=${currentOffset}&category=${category}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.html) {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(data.html, 'text/html');
+              // We need to strip the wrapping html/body if present, but since it returns just the partial, it should be fine.
+              // However, data.html is likely a string of divs.
+
+              // Direct insertion
+              blogGrid.insertAdjacentHTML('beforeend', data.html);
+              currentOffset += 5;
+            }
+            if (!data.has_next) {
+              loadMoreBtn.style.display = 'none';
+            }
+          })
+          .catch(err => console.error(err))
+          .finally(() => {
+            loadMoreBtn.innerText = originalText;
+            loadMoreBtn.disabled = false;
+          });
+      });
+    }
+
+    // Event Delegation for Like, Comment Toggle, and Send
+    document.addEventListener('click', (e) => {
+
+      // LIKE BUTTON
+      if (e.target.closest('.like-btn')) {
+        const btn = e.target.closest('.like-btn');
+        const blogId = btn.dataset.blogId;
+
+        fetch('/api/toggle-like/', {
+          method: 'POST',
+          body: JSON.stringify({ blog_id: blogId }),
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              const svg = btn.querySelector('svg');
+              const countSpan = btn.querySelector('.like-count');
+
+              if (data.is_liked) {
+                btn.classList.add('liked');
+                svg.classList.add('text-red-500', 'fill-current');
+                countSpan.classList.add('text-red-500');
+              } else {
+                btn.classList.remove('liked');
+                svg.classList.remove('text-red-500', 'fill-current');
+                countSpan.classList.remove('text-red-500');
+              }
+              countSpan.textContent = `${data.like_count} Likes`;
+            } else {
+              console.error(data.error);
+            }
+          });
+      }
+
+      // COMMENT TOGGLE
+      if (e.target.closest('.comment-toggle-btn')) {
+        const btn = e.target.closest('.comment-toggle-btn');
+        const blogId = btn.dataset.blogId;
+        const section = document.getElementById(`comments-section-${blogId}`);
+        section.classList.toggle('hidden');
+      }
+
+      // SEND COMMENT
+      if (e.target.closest('.send-comment-btn')) {
+        const btn = e.target.closest('.send-comment-btn');
+        const blogId = btn.dataset.blogId;
+        const input = btn.previousElementSibling; // Assuming input is just before button
+        const commentText = input.value.trim();
+
+        if (!commentText) return;
+
+        fetch('/api/add-comment/', {
+          method: 'POST',
+          body: JSON.stringify({ blog_id: blogId, comment: commentText }),
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              // Add new comment to list
+              const section = document.getElementById(`comments-section-${blogId}`);
+              const list = section.querySelector('.comment-list');
+              list.insertAdjacentHTML('afterbegin', data.html);
+
+              // Clear input
+              input.value = '';
+
+              // Update count
+              const card = btn.closest('.bg-white\\/90'); // Find parent card
+              const commentCountSpan = card.querySelector('.comment-count');
+              commentCountSpan.textContent = `${data.comment_count} Comments`;
+
+            } else {
+              alert('Error: ' + data.error);
+            }
+          });
+      }
+
+      // SUBMIT REPORT
+      if (e.target.closest('.submit-report-btn')) {
+        const btn = e.target.closest('.submit-report-btn');
+        const blogId = btn.dataset.blogId;
+        const subject = document.getElementById(`report-subject-${blogId}`).value;
+        const text = document.getElementById(`report-text-${blogId}`).value;
+
+        if (!subject || !text) {
+          alert("Please fill all fields");
+          return;
+        }
+
+        fetch('/api/add-complaint/', {
+          method: 'POST',
+          body: JSON.stringify({ blog_id: blogId, subject: subject, complaint: text }),
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              alert("Complaint submitted successfully.");
+              document.getElementById(`report-modal-${blogId}`).classList.add('hidden');
+            } else {
+              alert("Error: " + data.error);
+            }
+          });
+      }
+    });
+
+    // Screenshot & Copy Protection
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'PrintScreen') {
+        navigator.clipboard.writeText(''); // Attempt to clear clipboard
+        alert('Screenshots are disabled due to copyright policy.');
+      }
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      alert('Screenshots are disabled due to copyright policy.');
+    });
+
+    // Disable Copying via Keyboard Shortcuts (Ctrl+C)
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && (e.key === 'c' || e.key === 'C')) {
+        e.preventDefault();
+        alert('Copying content is disabled.');
+      }
+    });
+
+  </script>
+</body>
+
+</html>
+

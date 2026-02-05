@@ -1,0 +1,294 @@
+{% load static %}
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Users - Admin | Smart Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hover-lift {
+      transition: all 0.3s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
+    }
+
+    .glow {
+      box-shadow: 0 0 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .sidebar-link {
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-link:hover {
+      background-color: rgba(102, 126, 234, 0.1);
+      padding-left: 1.5rem;
+    }
+
+    .sidebar-link.active {
+      background-color: rgba(102, 126, 234, 0.15);
+      border-left: 4px solid #667eea;
+      padding-left: 1.5rem;
+    }
+
+    .table-row:hover {
+      background-color: rgba(102, 126, 234, 0.05);
+    }
+  </style>
+</head>
+<body class="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 text-gray-900">
+
+  <div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white/90 backdrop-blur-xl shadow-2xl fixed h-full z-10">
+      <div class="p-8">
+             <!-- Logo -->
+<div class="flex items-center space-x-4 mb-12">
+  <img
+    src="{% static 'images/logo.jpeg' %}"
+    alt="Awaaz Logo"
+    class="w-12 h-12 rounded-full object-cover"
+  />
+  <span class="text-2xl font-bold gradient-text">Awaaz</span>
+</div>
+
+        <nav class="space-y-2">
+          <a href="/adminhome" class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="/users" class="sidebar-link active flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            <span>View Users</span>
+          </a>
+
+          <a href="/verifyblog" class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Approve/Reject Blogs</span>
+          </a>
+
+          <a href="/complaints" class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span>Complaints</span>
+          </a>
+
+          <a href="/feedback" class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <span>Feedback</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="absolute bottom-8 left-8 right-8">
+        <a href="/logout" class="flex items-center space-x-3 text-gray-600 hover:text-red-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-10">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <header class="mb-10 fade-in">
+          <h1 class="text-5xl font-bold gradient-text mb-4">Manage Users</h1>
+          <p class="text-xl text-gray-600">View and manage all registered users on Smart Blog</p>
+        </header>
+
+        <!-- Search & Filter Bar -->
+        <div class="mb-8 flex flex-col sm:flex-row gap-4">
+            <input 
+                id="searchInput"
+                type="text" 
+                placeholder="Search by name, email or phone..." 
+                class="flex-1 px-6 py-3 rounded-xl border border-gray-300 bg-white/70 focus:outline-none focus:border-[#667eea]"
+            />
+
+            <select id="statusFilter"
+                class="px-6 py-3 rounded-xl border border-gray-300 bg-white/70 focus:outline-none focus:border-[#667eea]">
+                <option value="all">All Users</option>
+                <option value="active">Active</option>
+                <option value="banned">Banned</option>
+            </select>
+
+            <button onclick="filterUsers()"
+                class="px-8 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-medium hover:opacity-90">
+                Search
+            </button>
+            </div>
+
+
+        <!-- Users Table -->
+        <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl glow overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-gradient-to-r from-[#667eea]/10 to-[#764ba2]/10">
+                <tr>
+                  <th class="px-8 py-5 text-left text-sm font-semibold text-gray-700">Profile</th>
+                  <th class="px-8 py-5 text-left text-sm font-semibold text-gray-700">Name</th>
+                  <th class="px-8 py-5 text-left text-sm font-semibold text-gray-700">Email</th>
+                  <th class="px-8 py-5 text-left text-sm font-semibold text-gray-700">Phone</th>
+                  <th class="px-8 py-5 text-left text-sm font-semibold text-gray-700">Joined</th>
+                  <th class="px-8 py-5 text-left text-sm font-semibold text-gray-700">Status</th>
+                  <th class="px-8 py-5 text-center text-sm font-semibold text-gray-700">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                {% for user in page_obj %}
+                <tr class="table-row transition-all"
+                    data-name="{{ user.Name|lower }}"
+                    data-email="{{ user.email|lower }}"
+                    data-phone="{{ user.Phone }}"
+                    data-status="{% if user.LOGINID.usertype == 'USER' %}active{% else %}banned{% endif %}">
+                    <td class="px-8 py-6">
+                      {% if user.profile %}
+                    <img src="{{ user.profile.url|default:'https://via.placeholder.com/150' }}"
+                        class="w-12 h-12 rounded-full object-cover border-2 border-[#667eea]">
+                        {% else %}
+                    <img src="https://via.placeholder.com/150"
+                        class="w-12 h-12 rounded-full object-cover border-2 border-[#667eea]">
+                        {% endif %}
+                    </td>
+
+                    <td class="px-8 py-6 text-sm font-medium">
+                    {{ user.Name }}
+                    </td>
+
+                    <td class="px-8 py-6 text-sm text-gray-600">
+                    {{ user.email }}
+                    </td>
+
+                    <td class="px-8 py-6 text-sm text-gray-600">
+                    {{ user.Phone }}
+                    </td>
+
+                    <td class="px-8 py-6 text-sm text-gray-600">
+                    {{ user.joined_at|date:"M d, Y" }}
+                    </td>
+
+                    <td class="px-8 py-6">
+                    {% if user.LOGINID.usertype == "USER" %}
+                        <span class="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Active</span>
+                    {% else %}
+                        <span class="px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">Banned</span>
+                    {% endif %}
+                    </td>
+
+                    <td class="px-8 py-6 text-center">
+                    {% if user.LOGINID.usertype == "USER" %}
+                        <a href="/ban/{{ user.id }}" class="text-red-600 hover:underline">Ban</a>
+                    {% else %}
+                        <a href="/unban/{{ user.id }}" class="text-green-600 hover:underline">Unban</a>
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+          </div>
+
+          <!-- Pagination -->
+         <div class="px-8 py-6 border-t border-gray-200 flex items-center justify-between">
+            <p class="text-sm text-gray-600">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </p>
+
+            <div class="flex space-x-2">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}"
+                    class="px-4 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50">
+                    Previous
+                </a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="px-4 py-2 rounded-lg bg-[#667eea] text-white">{{ num }}</span>
+                {% else %}
+                    <a href="?page={{ num }}"
+                    class="px-4 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50">
+                    {{ num }}
+                    </a>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                    class="px-4 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+            </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+<script>
+function filterUsers() {
+    const searchValue = document.getElementById("searchInput").value.toLowerCase();
+    const statusValue = document.getElementById("statusFilter").value;
+    const rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+        const name = row.dataset.name || "";
+        const email = row.dataset.email || "";
+        const phone = row.dataset.phone || "";
+        const status = row.dataset.status || "";
+
+        const matchesSearch =
+            name.includes(searchValue) ||
+            email.includes(searchValue) ||
+            phone.includes(searchValue);
+
+        const matchesStatus =
+            statusValue === "all" || status === statusValue;
+
+        if (matchesSearch && matchesStatus) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+// 🔥 Live search while typing
+document.getElementById("searchInput").addEventListener("keyup", filterUsers);
+document.getElementById("statusFilter").addEventListener("change", filterUsers);
+</script>
+
+
+</body>
+</html>

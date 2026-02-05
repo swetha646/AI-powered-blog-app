@@ -1,0 +1,78 @@
+{% for blog in blogs %}
+<div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl glow hover-lift scale-in overflow-hidden flex flex-col"
+    style="animation-delay: 0.{{ forloop.counter }}s;">
+    <!-- Image -->
+    <div class="relative w-full h-80">
+        {% if blog.Image %}
+        <img src="{{ blog.Image.url }}" alt="Blog cover" class="blog-image">
+        {% else %}
+        <img src="https://via.placeholder.com/800x400?text=No+Image" alt="Blog cover" class="blog-image">
+        {% endif %}
+        <div class="absolute top-4 left-4 bg-white/80 backdrop-blur px-4 py-2 rounded-full">
+            <span class="text-sm font-medium text-gray-700">{{ blog.category|default:"General" }}</span>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="p-10 flex flex-col justify-between flex-grow">
+        <div>
+            <h2 class="text-3xl font-bold mb-4">{{ blog.title }}</h2>
+            <div class="text-gray-600 mb-6 leading-relaxed">
+                {{ blog.blog|truncatewords:30|linebreaks }}
+            </div>
+        </div>
+
+        <!-- Social Actions -->
+        <div class="mt-8 border-t border-gray-100 pt-6">
+            <div class="flex items-center justify-between mb-6">
+                <button class="like-btn flex items-center space-x-2 group focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-7 h-7 text-gray-400 group-hover:text-red-500 transition-all duration-300 transform group-hover:scale-110"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <span class="font-medium text-gray-500 group-hover:text-red-500 transition-colors">Like</span>
+                </button>
+
+                <button class="flex items-center space-x-2 text-gray-600 hover:text-[#667eea] transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    <span class="font-medium">Comment</span>
+                </button>
+            </div>
+
+            <!-- Author & Read More -->
+            <div class="mt-8 flex items-center justify-between border-t border-gray-100 pt-6">
+                <div class="flex items-center space-x-4">
+                    {% if blog.USERID.profile %}
+                    <img src="{{ blog.USERID.profile.url }}" alt="Author"
+                        class="w-12 h-12 rounded-full border-2 border-[#667eea]">
+                    {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Author"
+                        class="w-12 h-12 rounded-full border-2 border-[#667eea]">
+                    {% endif %}
+                    <div>
+                        <p class="font-semibold">{{ blog.USERID.Name }}</p>
+                        <p class="text-sm text-gray-500">{{ blog.created_at|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+                <a href="{% url 'blog_detail' blog.id %}"
+                    class="px-8 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-medium hover:opacity-90 transition-all">
+                    Read Full Blog
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% empty %}
+{% if not request.GET.offset %}
+<div class="col-span-2 text-center py-20">
+    <h3 class="text-2xl font-bold text-gray-400">No blogs found yet!</h3>
+    <p class="text-gray-500 mt-2">Check back later for new stories.</p>
+</div>
+{% endif %}
+{% endfor %}

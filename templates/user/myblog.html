@@ -1,0 +1,239 @@
+{% load static %}
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Blogs – Awaaz</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(191,219,254,0.6), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(224,242,254,0.7), transparent 55%),
+        #f4f6fb;
+    }
+
+    /* Fade animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+
+    /* Gradient text (brand) */
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Index-style navbar */
+    nav {
+      background: linear-gradient(135deg, #1e1b4b, #312e81) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+
+    /* Logo – same as userhome */
+    .logo-img {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      transition: transform 0.2s ease;
+    }
+    nav .logo-img:hover {
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+
+<body class="h-full text-gray-900 select-none">
+
+<!-- ================= NAVBAR (SAME AS USERHOME) ================= -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl shadow-lg"> 
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"> 
+      <div class="flex items-center space-x-4"> 
+        <img src="{% static 'images/logo.jpeg' %}" alt="Awaaz Logo" class="logo-img" /> 
+        <span class="text-3xl font-bold gradient-text">Awaaz</span> </div>
+
+      <div class="flex items-center space-x-8">
+        <a href="/userhome" class="text-lg font-medium text-[#667eea]">Home</a>
+        <a href="/my-blogs" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">My Blogs</a>
+        <a href="/support" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">Support</a>
+        <a href="/addblog"
+          class="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-medium hover:opacity-90 transition-all">
+          Write New
+        </a>
+        <div class="relative group inline-block">
+  <!-- Small profile -->
+  <div class="flex items-center space-x-3 cursor-pointer">
+    {% if c.profile %}
+      <img src="{{ c.profile.url }}" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% else %}
+      <img src="https://via.placeholder.com/40" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% endif %}
+    <span class="font-medium">{{ c.Name }}</span>
+  </div>
+
+  <!-- Hover card -->
+  <div
+       class="absolute left-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg
+              opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50">
+
+        <div class="p-4 flex flex-col items-center space-y-3">
+          {% if c.profile %}
+            <img src="{{ c.profile.url }}" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% else %}
+            <img src="https://via.placeholder.com/96" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% endif %}
+
+          <h3 class="text-lg font-semibold">{{ c.Name }}</h3>
+          {% if c.email %}<p class="text-sm text-gray-500">{{ c.email }}</p>{% endif %}
+          {% if c.Phone %}<p class="text-sm text-gray-500">{{ c.Phone }}</p>{% endif %}
+          {% if c.Address %}<p class="text-sm text-gray-500 text-center">{{ c.Address }}</p>{% endif %}
+
+          <a href="/edit-profile/"
+            class="mt-2 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700">
+            Edit Profile
+          </a>
+        </div>
+      </div>
+    </div>
+
+        <a href="/logout" onclick="return confirm('Are you sure you want to logout?');"
+          class="px-5 py-2 border-2 border-red-500 text-red-500 rounded-xl font-medium hover:bg-red-50 transition-all">
+          Logout
+        </a>
+      </div>
+    </div>
+  </nav>
+
+<!-- ================= MAIN ================= -->
+<main class="pt-28 px-6 pb-20 max-w-7xl mx-auto">
+
+  <div class="flex justify-between items-center mb-12 fade-in">
+    <h1 class="text-4xl font-extrabold gradient-text">My Stories</h1>
+    <a href="/addblog"
+       class="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2]
+              text-white rounded-xl font-medium hover:opacity-90 shadow">
+      + Create New Story
+    </a>
+  </div>
+
+  {% if blogs %}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 fade-in">
+    {% for blog in blogs %}
+    <div class="bg-white rounded-3xl border border-gray-200 shadow-lg hover:shadow-2xl transition-all overflow-hidden flex flex-col">
+
+      <div class="h-48 relative overflow-hidden">
+{% if blog.Image %}
+            {% with blog.Image.url|lower as file_url %}
+                {% if file_url|slice:"-4:" == ".mp4" %}
+                    <video class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" autoplay muted loop>
+                        <source src="{{ blog.Image.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% else %}
+                    <img src="{{ blog.Image.url }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                {% endif %}
+            {% endwith %}
+        {% else %}
+            <img src="https://via.placeholder.com/400x250?text=No+Image" class="w-full h-full object-cover">
+        {% endif %}
+        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-[#667eea]">
+          {{ blog.category }}
+        </div>
+
+        {% if blog.status == 'Pending' %}
+        <div class="absolute top-4 left-4 bg-yellow-100 px-3 py-1 rounded-full text-xs font-bold text-yellow-700">
+          Pending Review
+        </div>
+        {% elif blog.status == 'Rejected' %}
+        <div class="absolute top-4 left-4 bg-red-100 px-3 py-1 rounded-full text-xs font-bold text-red-700">
+          Rejected
+        </div>
+        {% elif blog.status == 'Accepted' %}
+        <div class="absolute top-4 left-4 bg-green-100 px-3 py-1 rounded-full text-xs font-bold text-green-700">
+          Published
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="p-6 flex flex-col flex-1">
+        <h3 class="text-xl font-bold text-gray-800 mb-2 line-clamp-2">
+          {{ blog.title }}
+        </h3>
+        {% if blog.parent %}
+<p class="text-sm text-gray-500 mb-4">
+    Continuing from: 
+    <a href="/blog/{{ blog.parent.id }}/" class="text-indigo-500 hover:underline">
+        {{ blog.parent.title }}
+    </a>
+</p>
+{% endif %}
+
+        <p class="text-sm text-gray-500 mb-3">
+          Posted on {{ blog.created_at|date:"M d, Y" }}
+        </p>
+
+        <p class="text-gray-600 line-clamp-3 mb-6">
+          {{ blog.content }}
+        </p>
+
+        <div class="mt-auto flex justify-between items-center border-t pt-4">
+          <a href="/blog/{{ blog.id }}" class="text-[#667eea] font-medium hover:underline">
+            Read
+          </a>
+
+          <div class="flex space-x-3">
+            <a href="/edit-blog/{{ blog.id }}/"
+               class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+               title="Edit">
+              ✏️
+            </a>
+            <a href="/delete-blog/{{ blog.id }}/"
+               onclick="return confirm('Are you sure you want to delete this blog?')"
+               class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+               title="Delete">
+              🗑️
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="text-center py-24 fade-in">
+    <h3 class="text-2xl font-bold mb-2">No Stories Yet</h3>
+    <p class="text-gray-500 mb-8">
+      You haven’t published any blogs yet.
+    </p>
+    <a href="/addblog"
+       class="px-8 py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2]
+              text-white rounded-xl font-bold hover:opacity-90 shadow">
+      Start Writing
+    </a>
+  </div>
+  {% endif %}
+
+</main>
+
+</body>
+</html>
+

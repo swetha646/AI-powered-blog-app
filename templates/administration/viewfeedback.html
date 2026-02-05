@@ -1,0 +1,75 @@
+{% load static %}
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Feedback - Admin | Smart Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+
+<body class="h-full bg-gray-50 text-gray-900 font-sans">
+
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-2xl fixed h-full z-10">
+      <!-- (Reusing sidebar for consistency - simplified) -->
+      <div class="p-8">
+        <!-- Logo -->
+        <div class="flex items-center space-x-4 mb-12">
+          <img
+            src="{% static 'images/logo.jpeg' %}"
+            alt="Awaaz Logo"
+            class="w-12 h-12 rounded-full object-cover"
+          />
+          <span class="text-2xl font-bold gradient-text">Awaaz</span>
+      </div>
+      <nav class="space-y-2 p-4">
+        <a href="/adminhome" class="block px-6 py-4 rounded-xl text-gray-700 hover:bg-gray-100">Dashboard</a>
+        <a href="/users" class="block px-6 py-4 rounded-xl text-gray-700 hover:bg-gray-100">View Users</a>
+        <a href="/verifyblog" class="block px-6 py-4 rounded-xl text-gray-700 hover:bg-gray-100">Approve Blogs</a>
+        <a href="/complaints" class="block px-6 py-4 rounded-xl text-gray-700 hover:bg-gray-100">Complaints</a>
+        <a href="/feedback" class="block px-6 py-4 rounded-xl font-bold text-[#667eea] bg-blue-50">Feedback</a>
+        <a href="/logout" class="block px-6 py-4 rounded-xl text-red-600 hover:bg-red-50 mt-10">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="flex-1 ml-64 p-10">
+      <header class="mb-10">
+        <h1 class="text-4xl font-bold gradient-text mb-4">User Feedback</h1>
+        <p class="text-gray-600">See what users are saying about the platform.</p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for f in feedback %}
+        <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center space-x-3">
+              <img src="{{ f.USERID.profile.url }}" class="w-10 h-10 rounded-full bg-gray-200 object-cover">
+              <div>
+                <h3 class="font-bold text-gray-800">{{ f.USERID.Name }}</h3>
+                <p class="text-xs text-gray-500">{{ f.created_at }}</p>
+              </div>
+            </div>
+            <div class="flex text-yellow-400">
+              {% for i in "12345"|make_list %}
+              {% if forloop.counter <= f.rating|add:"0" %}★{% else %}☆{% endif %} {% endfor %} </div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl text-gray-700 italic">
+              "{{ f.Feedback }}"
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+    </main>
+  </div>
+</body>
+
+</html>

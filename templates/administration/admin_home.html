@@ -1,0 +1,302 @@
+{% load static %}
+
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Smart Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hover-lift {
+      transition: all 0.3s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
+    }
+
+    .glow {
+      box-shadow: 0 0 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .sidebar-link {
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-link:hover {
+      background-color: rgba(102, 126, 234, 0.1);
+      padding-left: 1.5rem;
+    }
+
+    .sidebar-link.active {
+      background-color: rgba(102, 126, 234, 0.15);
+      border-left: 4px solid #667eea;
+      padding-left: 1.5rem;
+    }
+    
+  </style>
+</head>
+
+<body class="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 text-gray-900">
+
+  <div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white/90 backdrop-blur-xl shadow-2xl fixed h-full z-10">
+      <div class="p-8">
+        <!-- Logo -->
+<div class="flex items-center space-x-4 mb-12">
+  <img
+    src="{% static 'images/logo.jpeg' %}"
+    alt="Awaaz Logo"
+    class="w-12 h-12 rounded-full object-cover"
+  />
+  <span class="text-2xl font-bold gradient-text">Awaaz</span>
+</div>
+
+       
+
+
+        <nav class="space-y-2">
+          <a href="/adminhome"
+            class="sidebar-link active flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="/users"
+            class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <span>View Users</span>
+          </a>
+
+          <a href="/verifyblog"
+            class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>Approve/Reject Blogs</span>
+          </a>
+
+          <a href="/complaints"
+            class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Complaints</span>
+          </a>
+
+          <a href="/feedback"
+            class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <span>Feedback</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="absolute bottom-8 left-8 right-8">
+        <button onclick="return confirm('Are you confirm to Logout')"><a href="/logout" class="flex items-center space-x-3 text-gray-600 hover:text-red-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          <span>Logout</span>
+        </a></button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-10">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <header class="mb-12 fade-in">
+          <h1 class="text-5xl font-bold gradient-text mb-4">Admin Dashboard</h1>
+          <p class="text-xl text-gray-600">Welcome back! Here's what's happening on Smart Blog today.</p>
+          <p class="text-sm text-gray-500 mt-2">{% now "F d, Y" %}</p>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl glow hover-lift fade-in">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-700">Total Users</h3>
+              <svg class="w-10 h-10 text-[#667eea]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <p class="text-4xl font-bold gradient-text">{{ total_users }}</p>
+            <p class="text-sm text-green-600 mt-2">Registered Users</p>
+          </div>
+
+          <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl glow hover-lift fade-in"
+            style="animation-delay: 0.1s;">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-700">Total Blogs</h3>
+              <svg class="w-10 h-10 text-[#764ba2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <p class="text-4xl font-bold gradient-text">{{ total_blogs }}</p>
+            <p class="text-sm text-green-600 mt-2">Published & Pending</p>
+          </div>
+
+          <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl glow hover-lift fade-in"
+            style="animation-delay: 0.2s;">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-700">Pending Blogs</h3>
+              <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p class="text-4xl font-bold text-orange-600">{{ pending_blogs }}</p>
+            <p class="text-sm text-gray-600 mt-2">Awaiting approval</p>
+          </div>
+
+          <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl glow hover-lift fade-in"
+            style="animation-delay: 0.3s;">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-700">Complaints</h3>
+              <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <p class="text-4xl font-bold text-red-600">{{ complaints_count }}</p>
+            <p class="text-sm text-gray-600 mt-2">Needs attention</p>
+          </div>
+        </div>
+
+        <!-- Growth Chart -->
+        <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl glow fade-in mb-12">
+          <h2 class="text-3xl font-bold gradient-text mb-8">Platform Growth - Last 30 Days</h2>
+          <canvas id="growthChart" height="100"></canvas>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 fade-in">
+          <a href="/admin/users"
+            class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl glow hover-lift text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-[#667eea]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <h3 class="text-2xl font-bold mb-2">Manage Users</h3>
+            <p class="text-gray-600">View, edit, or ban users</p>
+          </a>
+
+          <a href="/admin/pending-blogs"
+            class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl glow hover-lift text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-[#764ba2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 class="text-2xl font-bold mb-2">Review Blogs</h3>
+            <p class="text-gray-600">Approve or reject pending posts</p>
+          </a>
+
+          <a href="/admin/complaints"
+            class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl glow hover-lift text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <h3 class="text-2xl font-bold mb-2">Handle Complaints</h3>
+            <p class="text-gray-600">Review reported content</p>
+          </a>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Growth Chart with realistic data
+    const ctx = document.getElementById('growthChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: {{ chart_labels| safe }},
+      datasets: [
+      {
+        label: 'New Users',
+        data: {{ user_data| safe }},
+      borderColor: '#667eea',
+      backgroundColor: 'rgba(102, 126, 234, 0.2)',
+      tension: 0.4,
+      fill: true
+          },
+      {
+        label: 'New Blogs',
+        data: {{ blog_data| safe }},
+      borderColor: '#764ba2',
+      backgroundColor: 'rgba(118, 75, 162, 0.2)',
+      tension: 0.4,
+      fill: true
+          }
+    ]
+      },
+      options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+    });
+  </script>
+
+</body>
+
+</html>

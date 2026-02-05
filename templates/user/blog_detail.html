@@ -1,0 +1,269 @@
+{% load static %}
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog.title }} - Smart Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 50%;
+  background-color: #f0f4ff;
+  border: 2px solid #667eea;
+  animation: float 3s ease-in-out infinite;
+}
+
+    </style>
+</head>
+
+<body class="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl shadow-lg"> 
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"> 
+      <div class="flex items-center space-x-4"> 
+        <img src="{% static 'images/logo.jpeg' %}" alt="Awaaz Logo" class="logo-img" /> 
+        <span class="text-3xl font-bold gradient-text">Awaaz</span> </div>
+
+      <div class="flex items-center space-x-8">
+        <a href="/userhome" class="text-lg font-medium text-[#667eea]">Home</a>
+        <a href="/my-blogs" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">My Blogs</a>
+        <a href="/support" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">Support</a>
+        <a href="/addblog"
+          class="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-medium hover:opacity-90 transition-all">
+          Write New
+        </a>
+        <div class="relative group inline-block">
+  <!-- Small profile -->
+  <div class="flex items-center space-x-3 cursor-pointer">
+    {% if c.profile %}
+      <img src="{{ c.profile.url }}" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% else %}
+      <img src="https://via.placeholder.com/40" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% endif %}
+    <span class="font-medium">{{ c.Name }}</span>
+  </div>
+
+  <!-- Hover card -->
+  <div
+       class="absolute left-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg
+              opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50">
+
+        <div class="p-4 flex flex-col items-center space-y-3">
+          {% if c.profile %}
+            <img src="{{ c.profile.url }}" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% else %}
+            <img src="https://via.placeholder.com/96" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% endif %}
+
+          <h3 class="text-lg font-semibold">{{ c.Name }}</h3>
+          {% if c.email %}<p class="text-sm text-gray-500">{{ c.email }}</p>{% endif %}
+          {% if c.Phone %}<p class="text-sm text-gray-500">{{ c.Phone }}</p>{% endif %}
+          {% if c.Address %}<p class="text-sm text-gray-500 text-center">{{ c.Address }}</p>{% endif %}
+
+          <a href="/edit-profile/"
+            class="mt-2 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700">
+            Edit Profile
+          </a>
+        </div>
+      </div>
+    </div>
+
+        <a href="/logout" onclick="return confirm('Are you sure you want to logout?');"
+          class="px-5 py-2 border-2 border-red-500 text-red-500 rounded-xl font-medium hover:bg-red-50 transition-all">
+          Logout
+        </a>
+      </div>
+    </div>
+  </nav>
+    <!-- Main Content -->
+    <main class="pt-32 px-6 pb-20">
+        <div class="max-w-4xl mx-auto bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-10 fade-in">
+
+            <!-- Back Button -->
+            <a href="/userhome"
+                class="inline-flex items-center space-x-2 text-gray-600 hover:text-[#667eea] mb-8 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span>Back to Home</span>
+            </a>
+
+            <!-- Header Image -->
+            <div class="w-full h-96 relative mb-10 rounded-2xl overflow-hidden shadow-lg">
+                {% if blog.Image %}
+    {% with blog.Image.url|lower as file_url %}
+        {% if file_url|slice:"-4:" == ".mp4" %}
+            <video class="w-full h-full object-cover" autoplay muted loop>
+                <source src="{{ blog.Image.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        {% else %}
+            <img src="{{ blog.Image.url }}" alt="Blog cover" class="w-full h-full object-cover">
+        {% endif %}
+    {% endwith %}
+{% else %}
+    <img src="https://via.placeholder.com/800x400?text=No+Image" alt="Blog cover" class="w-full h-full object-cover">
+
+                <img src="https://via.placeholder.com/1200x600?text=No+Image" alt="Blog cover"
+                    class="w-full h-full object-cover">
+                {% endif %}
+                <div class="absolute top-6 left-6 bg-white/90 backdrop-blur px-5 py-2 rounded-full shadow-sm">
+                    <span class="font-bold text-[#667eea]">{{ blog.category|default:"General" }}</span>
+                </div>
+            </div>
+
+            <!-- Title & Meta -->
+            <div class="mb-10 border-b border-gray-100 pb-10">
+                <h1 class="text-5xl font-bold text-gray-900 mb-6 leading-tight">{{ blog.title }}</h1>
+                {% if blog.parent %}
+<p class="text-sm text-gray-500 mb-4">
+    Continuing from: 
+    <a href="/blog/{{ blog.parent.id }}/" class="text-indigo-500 hover:underline">
+        {{ blog.parent.title }}
+    </a>
+</p>
+{% endif %}
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        {% if blog.USERID.profile %}
+                        <img src="{{ blog.USERID.profile.url }}" alt="Author"
+                            class="w-14 h-14 rounded-full border-2 border-[#667eea]">
+                        {% else %}
+                        <img src="https://via.placeholder.com/150" alt="Author"
+                            class="w-14 h-14 rounded-full border-2 border-[#667eea]">
+                        {% endif %}
+                        <div>
+                            <p class="text-lg font-semibold text-gray-900">{{ blog.USERID.Name }}</p>
+                            <p class="text-gray-500">{{ blog.created_at|date:"F d, Y" }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Listen Button -->
+                    <audio id="tts-audio" preload="none">
+                        <source src="/blog-full-tts/{{ blog.id }}/" type="audio/mpeg">
+                        </audio>
+
+                        <button id="ttsBtn"
+                        onclick="
+                            const audio = document.getElementById('tts-audio');
+                            if (audio.paused) {
+                                audio.play();
+                                this.innerText = '⏹ Stop';
+                            } else {
+                                audio.pause();
+                                audio.currentTime = 0;
+                                this.innerText = '🔊 Listen';
+                            }
+                        "
+                        class="px-5 py-2.5 bg-indigo-100 text-indigo-700 rounded-full hover:bg-indigo-200 transition-colors font-medium">
+                        🔊 Listen
+                        </button>
+
+                </div>
+            </div>
+
+            <!-- Blog Body -->
+            <article id="blog-content" class="prose prose-lg prose-indigo max-w-none text-gray-700 leading-loose">
+                {{ blog.blog|linebreaks }}
+            </article>
+
+        </div>
+    </main>
+
+    <script>
+        const speakBtn = document.getElementById('speakBtn');
+        const blogContent = document.getElementById('blog-content').innerText;
+        let speaking = false;
+        let utterance = null;
+
+        if ('speechSynthesis' in window) {
+            speakBtn.addEventListener('click', () => {
+                if (speaking) {
+                    window.speechSynthesis.cancel();
+                    speaking = false;
+                    resetButton();
+                } else {
+                    utterance = new SpeechSynthesisUtterance(blogContent);
+                    utterance.lang = document.documentElement.lang || 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                    utterance.onend = () => {
+                        speaking = false;
+                        resetButton();
+                    };
+                    window.speechSynthesis.speak(utterance);
+                    speaking = true;
+                    activeButton();
+                }
+            });
+        } else {
+            speakBtn.style.display = 'none';
+        }
+
+        function resetButton() {
+            speakBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                </svg>
+                <span>Listen</span>`;
+            speakBtn.classList.remove('bg-red-100', 'text-red-700', 'animate-pulse');
+            speakBtn.classList.add('bg-indigo-100', 'text-indigo-700');
+        }
+
+        function activeButton() {
+            speakBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                </svg>
+                <span>Stop</span>`;
+            speakBtn.classList.remove('bg-indigo-100', 'text-indigo-700');
+            speakBtn.classList.add('bg-red-100', 'text-red-700', 'animate-pulse');
+        }
+
+        // Stop speech when leaving page
+        window.onbeforeunload = function () {
+            window.speechSynthesis.cancel();
+        };
+    </script>
+
+</body>
+
+</html>

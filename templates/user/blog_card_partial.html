@@ -1,0 +1,206 @@
+{% for blog in blogs %}
+<style>
+    .blog-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .blog-image:hover {
+        transform: scale(1.1);
+    }
+</style>
+<div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl glow hover-lift scale-in overflow-hidden flex flex-col"
+    style="animation-delay: 0.{{ forloop.counter }}s;">
+    <!-- Image -->
+    <div class="relative w-full h-72 overflow-hidden rounded-t-3xl">
+    {% if blog.Image %}
+        {% with blog.Image.url|lower as file_url %}
+            {% if file_url|slice:"-4:" == ".mp4" %}
+                <video class="w-full h-full object-cover" autoplay muted loop>
+                    <source src="{{ blog.Image.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% else %}
+                <img src="{{ blog.Image.url }}" alt="Blog cover" class="blog-image">
+            {% endif %}
+        {% endwith %}
+    {% else %}
+        <img src="https://via.placeholder.com/800x400?text=No+Image" alt="Blog cover" class="blog-image">
+    {% endif %}
+    <div class="absolute top-4 left-4 bg-white/80 backdrop-blur px-4 py-2 rounded-full">
+        <span class="text-sm font-medium text-gray-700">{{ blog.category|default:"General" }}</span>
+    </div>
+</div>
+
+
+    <!-- Content -->
+    <div class="p-10 flex flex-col justify-between flex-grow">
+        <div>
+            <h2 class="text-3xl font-bold mb-4">{{ blog.title }}</h2>
+            {% if blog.parent %}
+                <p class="text-sm text-gray-500 mb-4">
+                    Continuing from: 
+                    <a href="/blog/{{ blog.parent.id }}/" class="text-indigo-500 hover:underline">
+                        {{ blog.parent.title }}
+                    </a>
+                </p>
+                {% endif %}
+            <div class="text-gray-600 mb-6 leading-relaxed">
+                {{ blog.blog|truncatewords:30|linebreaks }}
+            </div>
+            <audio id="audio-{{ blog.id }}" src="/blog-tts/{{ blog.id }}/"></audio>
+
+            <button
+                onclick="document.getElementById('audio-{{ blog.id }}').play()"
+                class="px-4 py-2 bg-indigo-500 text-white rounded-lg mt-2">
+                🔊 Listen
+            </button>
+        </div>
+
+        <!-- Social Actions -->
+        <div class="mt-8 border-t border-gray-100 pt-6">
+            <div class="flex items-center space-x-6 mb-6">
+                <!-- Like Button -->
+                <button
+                    class="like-btn flex items-center space-x-2 group focus:outline-none {% if blog.is_liked %}liked{% endif %}"
+                    data-blog-id="{{ blog.id }}">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-7 h-7 text-gray-400 group-hover:text-red-500 transition-all duration-300 transform group-hover:scale-110 {% if blog.is_liked %}text-red-500 fill-current{% endif %}"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <span
+                        class="like-count font-medium text-gray-500 group-hover:text-red-500 transition-colors {% if blog.is_liked %}text-red-500{% endif %}">
+                        {{ blog.like_count }} Likes
+                    </span>
+                </button>
+
+                <!-- Comment Toggle -->
+                <button
+                    class="comment-toggle-btn flex items-center space-x-2 text-gray-600 hover:text-[#667eea] transition-colors"
+                    data-blog-id="{{ blog.id }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    <span class="comment-count font-medium">{{ blog.comment_count }} Comments</span>
+                </button>
+
+                <!-- Report Button -->
+                <button
+                    class="report-btn flex items-center space-x-2 text-gray-400 hover:text-red-500 transition-colors ml-auto"
+                    onclick="document.getElementById('report-modal-{{ blog.id }}').classList.remove('hidden')"
+                    title="Report Blog">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Report Modal (Simple Overlay) -->
+            <div id="report-modal-{{ blog.id }}"
+                class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+                <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md scale-in">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">Report Content</h3>
+                        <button onclick="document.getElementById('report-modal-{{ blog.id }}').classList.add('hidden')"
+                            class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <input type="text" id="report-subject-{{ blog.id }}"
+                            placeholder="Reason (e.g., Harassment, Spam)"
+                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:outline-none">
+                        <textarea id="report-text-{{ blog.id }}" placeholder="Describe the issue..." rows="3"
+                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:outline-none"></textarea>
+                        <button
+                            class="submit-report-btn w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-colors"
+                            data-blog-id="{{ blog.id }}">
+                            Submit Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section (Hidden by default, or just input) -->
+            <div id="comments-section-{{ blog.id }}" class="hidden space-y-4 mt-4 border-t border-gray-100 pt-4">
+                <!-- Comment List (Latest 2) -->
+                <div class="comment-list space-y-3">
+                    {% for comment in blog.latest_comments %}
+                    <div class="flex items-start space-x-3">
+                        {% if comment.USERID.profile %}
+                        <img src="{{ comment.USERID.profile.url }}" alt="User"
+                            class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+                        {% else %}
+                        <img src="https://via.placeholder.com/150" alt="User"
+                            class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+                        {% endif %}
+                        <div class="flex-1 bg-gray-50 rounded-2xl px-4 py-3">
+                            <p class="font-medium text-sm">{{ comment.USERID.Name }}</p>
+                            <p class="text-gray-700 text-sm mt-1">{{ comment.comment }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Add Comment Input -->
+                <div class="flex items-center space-x-3">
+                    {% if c.profile %}
+                    <img src="{{ c.profile.url }}" alt="Current User"
+                        class="w-10 h-10 rounded-full border-2 border-[#667eea] user-profile-ph">
+                    {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Current User"
+                        class="w-10 h-10 rounded-full border-2 border-[#667eea] user-profile-ph">
+                    {% endif %}
+                    <input type="text" placeholder="Write a comment..."
+                        class="comment-input flex-1 px-5 py-3 rounded-full border border-gray-300 bg-white/70 focus:outline-none focus:border-[#667eea] transition-all"
+                        data-blog-id="{{ blog.id }}">
+                    <button
+                        class="send-comment-btn px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-full font-medium hover:opacity-90 transition-all"
+                        data-blog-id="{{ blog.id }}">
+                        Send
+                    </button>
+                </div>
+            </div>
+
+            <!-- Author & Read More -->
+            <div class="mt-8 flex items-center justify-between border-t border-gray-100 pt-6">
+                <div class="flex items-center space-x-4">
+                    {% if blog.USERID.profile %}
+                    <img src="{{ blog.USERID.profile.url }}" alt="Author"
+                        class="w-12 h-12 rounded-full border-2 border-[#667eea]">
+                    {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Author"
+                        class="w-12 h-12 rounded-full border-2 border-[#667eea]">
+                    {% endif %}
+                    <div>
+                        <p class="font-semibold">{{ blog.USERID.Name }}</p>
+                        <p class="text-sm text-gray-500">{{ blog.created_at|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+                <a href="/blog/{{blog.id}}/"
+                    class="px-8 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-medium hover:opacity-90 transition-all">
+                    Read Full Blog
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% empty %}
+{% if not request.GET.offset %}
+<div class="col-span-2 text-center py-20">
+    <h3 class="text-2xl font-bold text-gray-400">No blogs found yet!</h3>
+    <p class="text-gray-500 mt-2">Check back later for new stories.</p>
+</div>
+{% endif %}
+{% endfor %}

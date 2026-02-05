@@ -1,0 +1,442 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support – Awaaz</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(191,219,254,0.6), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(224,242,254,0.7), transparent 55%),
+        #f4f6fb;
+    }
+
+    /* Fade */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.6s ease-out forwards; }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg,#667eea,#764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Index-style navbar */
+    nav {
+      background: linear-gradient(135deg, #1e1b4b, #312e81) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    /* Logo – flat brand */
+    .logo-img {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      transition: transform 0.2s ease;
+    }
+    nav .logo-img:hover {
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+
+<body class="h-full text-gray-900 select-none">
+
+<!-- ================= NAVBAR (SAME AS USERHOME) ================= -->
+<nav class="fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <div class="flex items-center space-x-4">
+      <img src="{% static 'images/logo.jpeg' %}" class="logo-img" alt="Awaaz Logo">
+      <span class="text-3xl font-bold gradient-text">Awaaz</span>
+    </div>
+
+    <div class="flex items-center space-x-6">
+      <a href="/userhome" class="px-4 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100">
+        Home
+      </a>
+      <a href="/my-blogs" class="px-4 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100">
+        My Blogs
+      </a>
+      <a href="/support" class="px-4 py-2 rounded-lg font-medium text-[#667eea]">
+        Support
+      </a>
+
+      <a href="/addblog"
+         class="px-6 py-2 rounded-lg font-medium text-white
+                bg-gradient-to-r from-[#667eea] to-[#764ba2]
+                hover:opacity-90 transition">
+        Write New
+      </a>
+
+      <div class="flex items-center space-x-3">
+          {% if c.profile %}
+          <img src="{{c.profile.url}}" alt="User" class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+          <span class="font-medium">{{c.Name}}</span>
+          {% else %}
+          <img src="" alt="User" class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+          <span class="font-medium">{{c.Name}}</span>
+          {% endif %}
+        </div>
+
+      <a href="/logout"
+         class="px-5 py-2 rounded-lg font-medium border-2 border-red-500
+                text-red-500 hover:bg-red-50 transition">
+        Logout
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= CONTENT ================= -->
+<main class="pt-28 px-6 pb-20 max-w-7xl mx-auto">
+
+  <h1 class="text-5xl font-extrabold gradient-text text-center mb-16 fade-in">
+    Support Center
+  </h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+    <!-- MY COMPLAINTS -->
+    <div class="fade-in">
+      <h2 class="text-2xl font-bold mb-6">
+        🛑 My Complaints
+      </h2>
+
+      <div class="bg-white rounded-3xl border border-gray-200 shadow-lg
+                  p-6 max-h-[600px] overflow-y-auto space-y-4">
+
+        {% if complaints %}
+          {% for c in complaints %}
+          <div class="border border-gray-200 rounded-2xl p-5 hover:bg-gray-50 transition">
+
+            <div class="flex justify-between items-start mb-2">
+              <span class="font-semibold">{{ c.Subject }}</span>
+
+              {% if c.Reply %}
+              <span class="px-3 py-1 text-xs rounded-full bg-emerald-100 text-emerald-700 font-semibold">
+                Resolved
+              </span>
+              {% else %}
+              <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-semibold">
+                Pending
+              </span>
+              {% endif %}
+            </div>
+
+            <p class="text-xs text-gray-500 mb-2">{{ c.created_at }}</p>
+
+            <p class="bg-gray-50 p-3 rounded-xl text-gray-700 mb-3">
+              {{ c.Complaint }}
+            </p>
+
+            {% if c.Reply %}
+            <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl">
+              <p class="text-xs text-emerald-600 font-bold mb-1">Admin Reply</p>
+              <p class="text-sm text-gray-700">{{ c.Reply }}</p>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="flex flex-col items-center justify-center h-64 text-gray-400">
+            <p>No complaints filed yet.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div class="fade-in">
+      <h2 class="text-2xl font-bold mb-6">
+        ⭐ Send Feedback
+      </h2>
+
+      <div class="bg-white rounded-3xl border border-gray-200 shadow-lg p-8">
+
+        <form action="/support" method="POST">
+          {% csrf_token %}
+
+          <!-- RATING -->
+          <div class="mb-6">
+            <label class="block mb-3 font-medium text-gray-600">
+              Rate your experience
+            </label>
+
+            <div class="flex space-x-2 text-3xl">
+              {% for i in "54321" %}
+              <label class="cursor-pointer text-gray-400 hover:text-yellow-400">
+                <input type="radio" name="rating" value="{{ i }}" class="hidden peer">
+                <span class="peer-checked:text-yellow-400">★</span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- MESSAGE -->
+          <div class="mb-6">
+            <label class="block mb-2 font-medium text-gray-600">
+              Your Message
+            </label>
+            <textarea name="feedback" rows="5" required
+              placeholder="Tell us what you think…"
+              class="w-full px-5 py-4 rounded-xl bg-white border border-gray-300
+                     text-gray-800 placeholder-gray-400 resize-none
+                     focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            </textarea>
+          </div>
+
+          <button type="submit"
+            class="w-full py-4 rounded-xl font-bold text-white
+                   bg-gradient-to-r from-[#667eea] to-[#764ba2]
+                   hover:opacity-90 transition shadow-lg">
+            Submit Feedback
+          </button>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>
+
+{% load static %}
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support & Feedback - Smart Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 50%;
+  background-color: #f0f4ff;
+  border: 2px solid #667eea;
+  animation: float 3s ease-in-out infinite;
+}
+
+    </style>
+</head>
+
+<body class="h-full bg-gray-50 text-gray-900 font-sans">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl shadow-lg"> 
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"> 
+      <div class="flex items-center space-x-4"> 
+        <img src="{% static 'images/logo.jpeg' %}" alt="Awaaz Logo" class="logo-img" /> 
+        <span class="text-3xl font-bold gradient-text">Awaaz</span> </div>
+
+      <div class="flex items-center space-x-8">
+        <a href="/userhome" class="text-lg font-medium text-[#667eea]">Home</a>
+        <a href="/my-blogs" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">My Blogs</a>
+        <a href="/support" class="text-lg font-medium text-gray-700 hover:text-[#667eea]">Support</a>
+        <a href="/addblog"
+          class="px-6 py-3 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-medium hover:opacity-90 transition-all">
+          Write New
+        </a>
+        <div class="relative group inline-block">
+  <!-- Small profile -->
+  <div class="flex items-center space-x-3 cursor-pointer">
+    {% if c.profile %}
+      <img src="{{ c.profile.url }}" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% else %}
+      <img src="https://via.placeholder.com/40" alt="User"
+           class="w-10 h-10 rounded-full border-2 border-[#667eea]">
+    {% endif %}
+    <span class="font-medium">{{ c.Name }}</span>
+  </div>
+
+  <!-- Hover card -->
+  <div
+       class="absolute left-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg
+              opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50">
+
+        <div class="p-4 flex flex-col items-center space-y-3">
+          {% if c.profile %}
+            <img src="{{ c.profile.url }}" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% else %}
+            <img src="https://via.placeholder.com/96" alt="User"
+                class="w-24 h-24 rounded-full border-2 border-[#667eea]">
+          {% endif %}
+
+          <h3 class="text-lg font-semibold">{{ c.Name }}</h3>
+          {% if c.email %}<p class="text-sm text-gray-500">{{ c.email }}</p>{% endif %}
+          {% if c.Phone %}<p class="text-sm text-gray-500">{{ c.Phone }}</p>{% endif %}
+          {% if c.Address %}<p class="text-sm text-gray-500 text-center">{{ c.Address }}</p>{% endif %}
+
+          <a href="/edit-profile/"
+            class="mt-2 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700">
+            Edit Profile
+          </a>
+        </div>
+      </div>
+    </div>
+
+        <button onclick="return confirm('Are you confirm to Logout')"><a href="/logout"
+          class="px-5 py-2 border-2 border-red-500 text-red-500 rounded-xl font-medium hover:bg-red-50 transition-all">
+          Logout
+        </a></button>
+      </div>
+    </div>
+  </nav>
+
+    <main class="pt-32 px-6 pb-20 max-w-7xl mx-auto">
+        <h1 class="text-4xl font-bold mb-12 gradient-text text-center">Support Center</h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+            <!-- My Complaints Section -->
+            <div class="space-y-6 fade-in" style="animation-delay: 0.1s;">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                    My Complaints
+                </h2>
+
+                <div class="bg-white rounded-3xl shadow-xl p-6 min-h-[400px] overflow-y-auto max-h-[600px] space-y-4">
+                    {% if complaints %}
+                    {% for c in complaints %}
+                    <div class="border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-semibold text-gray-700">{{ c.Subject }}</span>
+                            {% if c.Reply %}
+                            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">Resolved</span>
+                            {% else %}
+                            <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">Pending</span>
+                            {% endif %}
+                        </div>
+                        <p class="text-gray-500 text-sm mb-3">{{ c.created_at }}</p>
+                        <p class="text-gray-800 mb-3 bg-gray-50 p-3 rounded-xl">{{ c.Complaint }}</p>
+
+                        {% if c.Reply %}
+                        <div class="bg-green-50 border border-green-100 p-3 rounded-xl">
+                            <p class="text-xs text-green-600 font-bold mb-1">Admin Reply:</p>
+                            <p class="text-green-800 text-sm">{{ c.Reply }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="flex flex-col items-center justify-center h-64 text-gray-400">
+                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p>No complaints filed yet.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="space-y-6 fade-in" style="animation-delay: 0.2s;">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
+                        </path>
+                    </svg>
+                    Send Feedback
+                </h2>
+
+                <div class="bg-white rounded-3xl shadow-xl p-8">
+                    <form action="/support" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2">Rate your experience</label>
+                            <div class="flex space-x-4">
+                                <!-- Simple Star Rating using Radios -->
+                                <div class="rating-group flex flex-row-reverse justify-end">
+                                    <input type="radio" name="rating" value="5" id="rat5" class="hidden peer/5">
+                                    <label for="rat5"
+                                        class="cursor-pointer text-gray-300 peer-checked/5:text-yellow-400 hover:text-yellow-400 text-3xl transition-colors">★</label>
+
+                                    <input type="radio" name="rating" value="4" id="rat4" class="hidden peer/4">
+                                    <label for="rat4"
+                                        class="cursor-pointer text-gray-300 peer-checked/4:text-yellow-400 peer-hover/5:text-yellow-400 hover:text-yellow-400 text-3xl transition-colors">★</label>
+
+                                    <input type="radio" name="rating" value="3" id="rat3" class="hidden peer/3">
+                                    <label for="rat3"
+                                        class="cursor-pointer text-gray-300 peer-checked/3:text-yellow-400 peer-hover/4:text-yellow-400 peer-hover/5:text-yellow-400 hover:text-yellow-400 text-3xl transition-colors">★</label>
+
+                                    <input type="radio" name="rating" value="2" id="rat2" class="hidden peer/2">
+                                    <label for="rat2"
+                                        class="cursor-pointer text-gray-300 peer-checked/2:text-yellow-400 peer-hover/3:text-yellow-400 peer-hover/4:text-yellow-400 peer-hover/5:text-yellow-400 hover:text-yellow-400 text-3xl transition-colors">★</label>
+
+                                    <input type="radio" name="rating" value="1" id="rat1" class="hidden peer/1">
+                                    <label for="rat1"
+                                        class="cursor-pointer text-gray-300 peer-checked/1:text-yellow-400 peer-hover/2:text-yellow-400 peer-hover/3:text-yellow-400 peer-hover/4:text-yellow-400 peer-hover/5:text-yellow-400 hover:text-yellow-400 text-3xl transition-colors">★</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2">Your Message</label>
+                            <textarea name="feedback" rows="5" placeholder="Tell us what you think..."
+                                class="w-full px-5 py-4 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:border-[#667eea] transition-all resize-none"
+                                required></textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl font-bold text-lg hover:opacity-90 shadow-lg transition-all">
+                            Submit Feedback
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+
+</html>

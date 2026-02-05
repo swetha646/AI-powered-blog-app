@@ -1,0 +1,371 @@
+{% load static %}
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Approve/Reject Blogs - Admin | Smart Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hover-lift {
+      transition: all 0.3s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
+    }
+
+    .glow {
+      box-shadow: 0 0 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .sidebar-link {
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-link:hover {
+      background-color: rgba(102, 126, 234, 0.1);
+      padding-left: 1.5rem;
+    }
+
+    .sidebar-link.active {
+      background-color: rgba(102, 126, 234, 0.15);
+      border-left: 4px solid #667eea;
+      padding-left: 1.5rem;
+    }
+
+    .blog-card:hover {
+      background-color: rgba(102, 126, 234, 0.05);
+    }
+
+    .negative-word {
+      background-color: rgba(239, 68, 68, 0.3);
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body class="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 text-gray-900">
+
+  <div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white/90 backdrop-blur-xl shadow-2xl fixed h-full z-10">
+      <div class="p-8">
+             <!-- Logo -->
+<div class="flex items-center space-x-4 mb-12">
+  <img
+    src="{% static 'images/logo.jpeg' %}"
+    alt="Awaaz Logo"
+    class="w-12 h-12 rounded-full object-cover"
+  />
+  <span class="text-2xl font-bold gradient-text">Awaaz</span>
+</div>
+
+        <nav class="space-y-2">
+          <a href="/adminhome"
+            class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="/users"
+            class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <span>View Users</span>
+          </a>
+
+          <a href="/admin/pending-blogs"
+            class="sidebar-link active flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>Approve/Reject Blogs</span>
+          </a>
+
+          <a href="/complaints"
+            class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Complaints</span>
+          </a>
+
+          <a href="/feedback"
+            class="sidebar-link flex items-center space-x-4 px-6 py-4 rounded-xl text-lg font-medium text-gray-700 hover:text-[#667eea]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <span>Feedback</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="absolute bottom-8 left-8 right-8">
+        <a href="/logout" class="flex items-center space-x-3 text-gray-600 hover:text-red-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-10">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <header class="mb-10 fade-in">
+          <h1 class="text-5xl font-bold gradient-text mb-4">Approve/Reject Blogs</h1>
+          <p class="text-xl text-gray-600">Review and moderate pending blog submissions from users</p>
+        </header>
+
+
+
+        <!-- Pending Blogs List -->
+        <div class="space-y-6">
+          {% for i in c %}
+          <!-- Pending Blog Card 1 -->
+          <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl glow blog-card transition-all fade-in">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center space-x-4">
+                <img src="{{i.USERID.profile.url}}" alt="Author"
+                  class="w-12 h-12 rounded-full border-2 border-[#667eea]">
+                <div>
+                  <h3 class="text-lg font-semibold">Author: <span class="text-gray-800">{{i.USERID.Name}}</span></h3>
+                  <p class="text-sm text-gray-600">Submitted: {{i.created_at|date:"M d, Y"}}</p>
+                </div>
+              </div>
+              {% if i.status == "Accepted" %}
+              <span class="px-4 py-2 text-xs font-medium rounded-full bg-green-100 text-green-800">Accepted</span>
+              {% elif i.status == "Rejected" %}
+              <span class="px-4 py-2 text-xs font-medium rounded-full bg-red-100 text-red-800">Rejected</span>
+              {% else %}
+              <span class="px-4 py-2 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+              {% endif %}
+            </div>
+            <div class="border-t border-gray-200 pt-4 mb-6">
+              <h2 class="text-2xl font-bold mb-2">{{i.title}}</h2>
+              
+              <p class="text-sm text-gray-600 mb-2"><strong>Category:</strong> {{i.category}}</p>
+              {% if i.parent %}
+<p class="text-sm text-gray-500 mb-2">
+    Continuing from: 
+    <a href="/blog/{{ i.parent.id }}/" class="text-indigo-500 hover:underline">
+        {{ i.parent.title }}
+    </a>
+</p>
+{% endif %}
+              <div class="relative w-full h-64 mb-4 rounded-xl overflow-hidden">
+    {% if i.Image %}
+        {% with i.Image.url|lower as file_url %}
+            {% if file_url|slice:"-4:" == ".mp4" %}
+                <video class="object-cover w-full h-full" autoplay muted loop>
+                    <source src="{{ i.Image.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% else %}
+                <img src="{{ i.Image.url }}" alt="Blog Image" class="object-cover w-full h-full">
+            {% endif %}
+        {% endwith %}
+    {% else %}
+        <img src="https://via.placeholder.com/400x250?text=No+Image" alt="No Image" class="object-cover w-full h-full">
+    {% endif %}
+</div>
+
+
+
+
+              <p id="content-{{i.id}}" class="text-gray-800 leading-relaxed">
+                {{i.blog}}
+              </p>
+              <p id="scanResult-{{i.id}}" class="mt-4 text-sm font-medium text-red-600 hidden"></p>
+            </div>
+            <div class="flex justify-end space-x-4">
+              <button onclick="scanContent('content-{{i.id}}', 'scanResult-{{i.id}}')"
+                class="px-6 py-3 bg-orange-200 text-orange-800 rounded-xl font-medium hover:bg-orange-300 transition-all">
+                Scan for Negative Words
+              </button>
+              {% if i.status == "Accepted" %}
+              <button onclick="window.location='/rejectblog/{{i.id}}'"
+                class="px-6 py-3 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700 transition-all">
+                Reject
+              </button>
+              {% elif i.status == "Rejected" %}
+              <button onclick="window.location='/acceptblog/{{i.id}}'"
+                class="px-6 py-3 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition-all">
+                Approve
+              </button>
+              {% else %}
+              <button onclick="window.location='/rejectblog/{{i.id}}'"
+                class="px-6 py-3 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700 transition-all">
+                Reject
+              </button>
+              <button onclick="window.location='/acceptblog/{{i.id}}'"
+                class="px-6 py-3 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition-all">
+                Approve
+              </button>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+
+
+          <!-- Add more pending blog cards as needed -->
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+  function scanContent(contentId, resultId) {
+    const contentEl = document.getElementById(contentId);
+    const resultEl = document.getElementById(resultId);
+    const content = contentEl.innerText;
+
+    resultEl.className = "mt-4 text-sm text-gray-600";
+    resultEl.innerText = "Scanning with AI moderation model...";
+    resultEl.classList.remove("hidden");
+
+    fetch("/api/scan-blog-ai/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": "{{ csrf_token }}"
+      },
+      body: JSON.stringify({ content })
+    })
+      .then(res => res.json())
+      .then(data => {
+        const issues = data.issues || [];
+        const mood = data.mood || "neutral";
+        const risk = data.risk || "LOW";
+
+        if (issues.length === 0) {
+          resultEl.innerText = `✔ Content is safe | Mood: ${mood}`;
+          resultEl.className = "mt-4 text-sm text-green-600 font-medium";
+          contentEl.classList.remove("ring", "ring-red-300");
+        } else {
+          resultEl.innerHTML = `
+            ⚠ AI flagged this content<br>
+            Issues: <b>${issues.join(", ")}</b><br>
+            Mood: <b>${mood}</b> | Risk: <b>${risk}</b>
+          `;
+          resultEl.className = "mt-4 text-sm text-red-600 font-semibold";
+
+          // Highlight entire content block (NOT words)
+          contentEl.classList.add("ring", "ring-red-300", "rounded-lg", "p-2");
+        }
+      })
+      .catch(() => {
+        resultEl.innerText = "AI service unavailable";
+        resultEl.className = "mt-4 text-sm text-red-600";
+      });
+  }
+</script>
+
+
+  <!-- <script>
+    const negativeWords = [
+      'hate', 'stupid', 'idiot', 'dumb', 'curse', 'badword', 'offensive', 'rude', 'vulgar',
+      'd*mn', 'a**hole', 'sh*t', 'f*ck', 'cr*p', 'asshole'
+    ];
+
+    function scanContent(contentId, resultId) {
+      const contentEl = document.getElementById(contentId);
+      const resultEl = document.getElementById(resultId);
+      const content = contentEl.innerText.toLowerCase();
+
+      resultEl.className = "mt-4 text-sm text-gray-600";
+      resultEl.innerText = "Scanning with AI...";
+      resultEl.classList.remove("hidden");
+
+      // Local scan for masked words
+      const foundLocal = negativeWords.filter(word => content.includes(word));
+
+      // Then call AI
+      fetch("/api/scan-blog-ai/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ content })
+      })
+        .then(res => res.json())
+        .then(data => {
+          const foundAI = data.issues || [];
+          const allIssues = [...new Set([...foundLocal, ...foundAI])];
+
+          if (allIssues.length === 0) {
+            resultEl.innerText = "✔ Content is safe. No abusive language detected.";
+            resultEl.className = "mt-4 text-sm text-green-600";
+          } else {
+            resultEl.innerText = `⚠ ${allIssues.length} Issues detected: ${allIssues.join(", ")}`;
+            resultEl.className = "mt-4 text-sm text-red-600 font-semibold";
+
+            // Highlight words
+            let html = contentEl.innerHTML;
+            allIssues.forEach(word => {
+              const regex = new RegExp(`(${word})`, "gi");
+              html = html.replace(regex, `<span class="negative-word">$1</span>`);
+            });
+            contentEl.innerHTML = html;
+          }
+        })
+        .catch(() => {
+          resultEl.innerText = "AI service unavailable";
+          resultEl.className = "mt-4 text-sm text-red-600";
+        });
+    }
+
+
+
+  </script> -->
+
+
+</body>
+
+</html>

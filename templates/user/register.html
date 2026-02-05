@@ -1,0 +1,309 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up – Awaaz</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Logo */
+    .logo-img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+    }
+
+    /* Preview image */
+    .preview-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #6366f1;
+    }
+
+    /* Password match */
+    .match-ok { border-color: #10b981 !important; }
+    .match-error { border-color: #ef4444 !important; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-[#f4f6fb]">
+
+<div class="min-h-screen grid grid-cols-1 md:grid-cols-2">
+
+  <!-- LEFT BRAND PANEL -->
+  <div class="hidden md:flex flex-col justify-center px-16
+              bg-gradient-to-br from-indigo-900 via-indigo-800 to-indigo-700 text-white">
+
+    <img src="{% static 'images/logo.jpeg' %}" class="logo-img mb-6" alt="Awaaz Logo">
+
+    <h1 class="text-4xl font-extrabold mb-4 leading-tight">
+      Start your journey<br>with Awaaz.
+    </h1>
+
+    <p class="text-indigo-200 text-lg max-w-md">
+      Create your account and begin writing, speaking, and sharing your thoughts.
+    </p>
+
+    <p class="mt-12 text-sm text-indigo-300 tracking-wide">
+      write • speak • vibe • repeat
+    </p>
+  </div>
+
+  <!-- RIGHT SIGNUP PANEL -->
+  <div class="flex items-center justify-center px-6 py-10">
+
+    <div class="w-full max-w-xl">
+
+      <!-- Mobile Header -->
+      <div class="md:hidden text-center mb-8">
+        <img src="{% static 'images/logo.jpeg' %}" class="logo-img mx-auto mb-4">
+        <h2 class="text-2xl font-extrabold text-[#1e1b4b]">
+          Create your account
+        </h2>
+        <p class="text-gray-500">
+          Join Awaaz today
+        </p>
+      </div>
+
+      <!-- Card -->
+      <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-200">
+
+        <form id="registerForm" action="/register" method="POST"
+              class="space-y-6" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+
+          <!-- Name + Photo -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+            <div>
+              <label class="text-sm font-semibold text-gray-600 mb-1 block">Full Name</label>
+              <input type="text" name="Name" required minlength="3"
+                     placeholder="John Doe"
+                     class="w-full px-4 py-3 rounded-xl border border-gray-300
+                            focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500">
+            </div>
+
+            <div class="text-center">
+              <label class="text-sm font-semibold text-gray-600 mb-2 block">Profile Photo</label>
+              <img id="preview" src="https://via.placeholder.com/80"
+                   class="preview-img mx-auto mb-2">
+              <label class="cursor-pointer inline-block px-4 py-2 text-sm font-medium text-white
+                             bg-indigo-600 rounded-xl hover:opacity-90">
+                Upload
+                <input type="file" id="profileImage" name="profile"
+                       accept="image/*" class="hidden" >
+              </label>
+            </div>
+          </div>
+
+          <!-- Email + Phone -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="text-sm font-semibold text-gray-600 mb-1 block">Email</label>
+              <input type="email" id="email" name="email" required
+                     placeholder="you@example.com"
+                     class="w-full px-4 py-3 rounded-xl border border-gray-300
+                            focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500">
+              <p id="emailError" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+
+            <div>
+              <label class="text-sm font-semibold text-gray-600 mb-1 block">Phone</label>
+              <input type="tel" id="phone" name="Phone" required maxlength="10"
+                     placeholder="9876543210"
+                     class="w-full px-4 py-3 rounded-xl border border-gray-300
+                            focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500">
+              <p id="phoneError" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label class="text-sm font-semibold text-gray-600 mb-1 block">Address</label>
+            <textarea name="Address" rows="2" placeholder="Your address"
+                      class="w-full px-4 py-3 rounded-xl border border-gray-300 resize-none
+                             focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500"></textarea>
+          </div>
+
+          <!-- Passwords with Eye Toggles -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Password -->
+            <div class="relative">
+              <label class="text-sm font-semibold text-gray-600 mb-1 block">Password</label>
+              <input type="password" id="password" name="password" required minlength="8"
+                     placeholder="Minimum 8 characters"
+                     class="w-full px-4 py-3 rounded-xl border border-gray-300 pr-12">
+              <button type="button" id="togglePassword"
+                      class="absolute right-3 top-[42px] text-gray-400 hover:text-indigo-600">
+                <svg id="eyeOpen" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7"/>
+                </svg>
+                <svg id="eyeClosed" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-width="2" d="M3 3l18 18"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="relative">
+              <label class="text-sm font-semibold text-gray-600 mb-1 block">Confirm Password</label>
+              <input type="password" id="confirm_password" name="confirm_password" required minlength="8"
+                     placeholder="Re-type password"
+                     class="w-full px-4 py-3 rounded-xl border border-gray-300 pr-12">
+              <button type="button" id="toggleConfirm"
+                      class="absolute right-3 top-[42px] text-gray-400 hover:text-indigo-600">
+                <svg id="eyeOpenConfirm" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7"/>
+                </svg>
+                <svg id="eyeClosedConfirm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-width="2" d="M3 3l18 18"/>
+                </svg>
+              </button>
+
+              <div id="passwordMatch" class="mt-1 text-xs font-medium"></div>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="submitBtn"
+                  class="w-full py-4 rounded-2xl font-bold text-white
+                         bg-gradient-to-r from-indigo-600 to-purple-600
+                         hover:scale-[1.02] transition">
+            Create Account
+          </button>
+        </form>
+
+        <!-- Links -->
+        <div class="text-center mt-6 space-y-2">
+          <p class="text-sm text-gray-500">
+            Already have an account?
+            <a href="/login" class="font-semibold text-indigo-600 hover:underline">Log in</a>
+          </p>
+          <a href="/" class="text-xs text-gray-400 hover:text-indigo-600">← Back to Home</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script>
+  // Profile preview
+  document.getElementById('profileImage').addEventListener('change', e => {
+    const reader = new FileReader();
+    reader.onload = ev => document.getElementById('preview').src = ev.target.result;
+    reader.readAsDataURL(e.target.files[0]);
+  });
+
+  // Password eye toggles
+  const pwd = document.getElementById('password');
+  const cpwd = document.getElementById('confirm_password');
+  const eyeOpen = document.getElementById('eyeOpen');
+  const eyeClosed = document.getElementById('eyeClosed');
+  const eyeOpenConfirm = document.getElementById('eyeOpenConfirm');
+  const eyeClosedConfirm = document.getElementById('eyeClosedConfirm');
+
+  document.getElementById('togglePassword').onclick = () => {
+    pwd.type = pwd.type === 'password' ? 'text' : 'password';
+    eyeOpen.classList.toggle('hidden');
+    eyeClosed.classList.toggle('hidden');
+  };
+
+  document.getElementById('toggleConfirm').onclick = () => {
+    cpwd.type = cpwd.type === 'password' ? 'text' : 'password';
+    eyeOpenConfirm.classList.toggle('hidden');
+    eyeClosedConfirm.classList.toggle('hidden');
+  };
+
+  // Password match check
+  const text = document.getElementById('passwordMatch');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function checkMatch() {
+    if (!cpwd.value) {
+      text.textContent = '';
+      return true;
+    }
+    if (pwd.value === cpwd.value) {
+      text.textContent = 'Passwords match ✓';
+      text.className = 'mt-1 text-xs text-green-600';
+      return true;
+    } else {
+      text.textContent = 'Passwords do not match ✗';
+      text.className = 'mt-1 text-xs text-red-600';
+      return false;
+    }
+  }
+
+  pwd.addEventListener('input', () => { checkMatch(); toggleSubmit(); });
+  cpwd.addEventListener('input', () => { checkMatch(); toggleSubmit(); });
+
+  // Email + Phone live validation
+  const emailInput = document.getElementById('email');
+  const phoneInput = document.getElementById('phone');
+  const emailError = document.getElementById('emailError');
+  const phoneError = document.getElementById('phoneError');
+
+  function validateEmail() {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailInput.value) {
+      emailError.classList.add('hidden');
+      emailInput.classList.remove('border-red-500');
+      return true;
+    }
+    if (!emailPattern.test(emailInput.value)) {
+      emailError.textContent = 'Please enter a valid email address';
+      emailError.classList.remove('hidden');
+      emailInput.classList.add('border-red-500');
+      return false;
+    }
+    emailError.classList.add('hidden');
+    emailInput.classList.remove('border-red-500');
+    return true;
+  }
+
+  function validatePhone() {
+    const phonePattern = /^[6-9]\d{9}$/;
+    if (!phoneInput.value) {
+      phoneError.classList.add('hidden');
+      phoneInput.classList.remove('border-red-500');
+      return true;
+    }
+    if (!phonePattern.test(phoneInput.value)) {
+      phoneError.textContent = 'Enter a valid 10-digit phone number';
+      phoneError.classList.remove('hidden');
+      phoneInput.classList.add('border-red-500');
+      return false;
+    }
+    phoneError.classList.add('hidden');
+    phoneInput.classList.remove('border-red-500');
+    return true;
+  }
+
+  function toggleSubmit() {
+    submitBtn.disabled = !(validateEmail() && validatePhone() && checkMatch());
+  }
+
+  emailInput.addEventListener('input', () => { validateEmail(); toggleSubmit(); });
+  phoneInput.addEventListener('input', () => { validatePhone(); toggleSubmit(); });
+
+  // Disable submit initially if fields are empty
+  toggleSubmit();
+</script>
+
+</body>
+</html>
